@@ -1,10 +1,10 @@
-package com.jwt.example.JwtExample;
+package com.amrit.jwt;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class JwtExampleApplicationTests {
+class JwtApplicationTests {
 
 	@Test
 	void contextLoads() {

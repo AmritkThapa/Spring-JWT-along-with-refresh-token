@@ -1,13 +1,13 @@
-package com.jwt.example.JwtExample;
+package com.amrit.jwt;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class JwtExampleApplication {
+public class JwtApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(JwtExampleApplication.class, args);
+		SpringApplication.run(JwtApplication.class, args);
 	}
 
 }
