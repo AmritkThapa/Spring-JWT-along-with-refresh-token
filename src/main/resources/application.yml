@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: jwt
+  jpa:
+    show-sql: false
+    database-platform: org.hibernate.dialect.MySQLDialect
+    database: mysql
+    hibernate:
+      ddl-auto: none
+    generate-ddl: false
+  datasource:
+    url: jdbc:mysql://localhost:3306/jwtproject?serverTimezone=Asia/Kathmandu&zeroDateTimeBehavior=convertToNull
+    username: root
+    password: root
+  liquibase:
+    enabled: true
+    change-log: classpath:db.changelog/changelog-master.yml
+
+#jwt:
+#  secret: ${SECRET_KEY}
+
+jwt:
+  secret: 68df8e1f2eecac2e710d417a38703da18be96266e9eabbd3af8a2056c750c630
