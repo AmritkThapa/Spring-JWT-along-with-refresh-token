@@ -10,5 +10,6 @@ import java.util.Optional;
 public interface TokenRepo extends JpaRepository<Token, Long> {
     List<Token> findByAppUserAndIsLoggedOutFalse(AppUser appUser);
 
-    Optional<Token> findByToken(String token);
+    Optional<Token> findByAccessToken(String accessToken);
+    Optional<Token> findByRefreshToken(String refreshToken);
 }

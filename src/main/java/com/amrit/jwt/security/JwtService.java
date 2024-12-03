@@ -9,14 +9,12 @@ import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -54,19 +52,24 @@ public class JwtService {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    private boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date(System.currentTimeMillis()));
+    private boolean isTokenNotExpired(String token) {
+        return !extractExpiration(token).before(new Date(System.currentTimeMillis()));
     }
 
     public boolean isTokenValid(String token, UserDetails appUser) {
         String username = extractUsername(token);
-        Boolean isValidToken = tokenRepo.findByToken(token)
+        Boolean isValidToken = tokenRepo.findByAccessToken(token)
                 .map(t->!t.isLoggedOut()).orElse(false);
-        return (username.equals(appUser.getUsername())) && !isTokenExpired(token) && isValidToken;
+        return (username.equals(appUser.getUsername())) && isTokenNotExpired(token) && isValidToken;
+    }
+    public boolean isValidRefreshToken(String token, AppUser appUser) {
+        String username = extractUsername(token);
+        Boolean isValidToken = tokenRepo.findByRefreshToken(token)
+                .map(t->!t.isLoggedOut()).orElse(false);
+        return (username.equals(appUser.getUsername())) && isTokenNotExpired(token) && isValidToken;
     }
 
-
-    public String generateToken(AppUser appUser) {
+    private String generateToken(AppUser appUser, long expireTime) {
         if (appUser == null) {
             log.info("Error: AppUser argument cannot be null.");
             throw new IllegalArgumentException("AppUser argument cannot be null.");
@@ -75,10 +78,19 @@ public class JwtService {
                 .subject(appUser.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .claim("roles", appUser.getAuthorities())
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
+                .expiration(new Date(System.currentTimeMillis() + expireTime))
                 .signWith(getSighingKey())
                 .compact();
     }
+
+    public String generateAccessToken(AppUser appUser) {
+        return generateToken(appUser, 1000 * 30);
+    }
+
+    public String generateRefreshToken(AppUser appUser) {
+        return generateToken(appUser, 1000 * 60 * 60 * 24 * 7);
+    }
+
 
 
 }

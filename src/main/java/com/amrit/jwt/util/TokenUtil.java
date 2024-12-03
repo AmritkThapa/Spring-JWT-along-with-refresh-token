@@ -8,13 +8,13 @@ import java.util.List;
 import java.util.Optional;
 
 public class TokenUtil {
-    public static String saveToken(Optional<AppUser> appUser, String jwt, TokenRepo tokenRepo) {
+    public static Token saveToken(Optional<AppUser> appUser, String accessToken, TokenRepo tokenRepo, String refreshToken) {
         Token token = new Token();
         token.setAppUser(appUser.get());
-        token.setToken(jwt);
+        token.setAccessToken(accessToken);
+        token.setRefreshToken(refreshToken);
         token.setLoggedOut(false);
-        tokenRepo.save(token);
-        return token.getToken();
+        return tokenRepo.save(token);
     }
 
     public static Boolean revokeAllTokensByUser(Optional<AppUser> appUser, TokenRepo tokenRepo) {

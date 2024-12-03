@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
@@ -39,7 +38,7 @@ public class CustomLogoutHandler implements LogoutHandler {
         }
 
         String token = authHeader.substring(7);
-        Token stroedToken = tokenRepo.findByToken(token).orElse(null);
+        Token stroedToken = tokenRepo.findByAccessToken(token).orElse(null);
 
         if (stroedToken != null) {
             stroedToken.setLoggedOut(true);
