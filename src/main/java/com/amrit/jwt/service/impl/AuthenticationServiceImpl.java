@@ -45,10 +45,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 return ResponseUtil.getFailureResponse("No user found with this username");
             }
 
-            Boolean revokeToken = TokenUtil.revokeAllTokensByUser(appUser, tokenRepo);
-            if (!revokeToken) {
-                return ResponseUtil.getFailureResponse("Failed to revoke previous tokens");
-            }
+            TokenUtil.revokeAllTokensByUser(appUser, tokenRepo);
             Token token =  TokenUtil.saveToken(appUser,
                     jwtService.generateAccessToken(appUser.get()),
                     tokenRepo,
@@ -78,12 +75,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String username = jwtService.extractUsername(refreshToken);
         Optional<AppUser> appUser = appUserRepo.findByUsername(username);
         if (appUser.isEmpty()) {
-            return ResponseUtil.getFailureResponse("No user found with this username");
+            return ResponseUtil.getFailureResponse("No user found");
         }
-        Boolean revokeToken = TokenUtil.revokeAllTokensByUser(appUser, tokenRepo);
-        if (!revokeToken) {
-            return ResponseUtil.getFailureResponse("Failed to revoke previous tokens");
-        }
+        TokenUtil.revokeAllTokensByUser(appUser, tokenRepo);
         Token token =  TokenUtil.saveToken(appUser,
                 jwtService.generateAccessToken(appUser.get()),
                 tokenRepo,
@@ -96,6 +90,4 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
         return ResponseUtil.getFailureResponse("Invalid refresh token");
     }
-
-
 }

@@ -1,6 +1,7 @@
 package com.amrit.jwt.security;
 
 import com.amrit.jwt.entity.AppUser;
+import com.amrit.jwt.entity.Token;
 import com.amrit.jwt.repository.TokenRepo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -59,14 +60,14 @@ public class JwtService {
     public boolean isTokenValid(String token, UserDetails appUser) {
         String username = extractUsername(token);
         Boolean isValidToken = tokenRepo.findByAccessToken(token)
-                .map(t->!t.isLoggedOut()).orElse(false);
-        return (username.equals(appUser.getUsername())) && isTokenNotExpired(token) && isValidToken;
+                .map(Token::isLoggedOut).orElse(false);
+        return (username.equals(appUser.getUsername())) && isTokenNotExpired(token) && !isValidToken;
     }
     public boolean isValidRefreshToken(String token, AppUser appUser) {
         String username = extractUsername(token);
         Boolean isValidToken = tokenRepo.findByRefreshToken(token)
-                .map(t->!t.isLoggedOut()).orElse(false);
-        return (username.equals(appUser.getUsername())) && isTokenNotExpired(token) && isValidToken;
+                .map(Token::isLoggedOut).orElse(false);
+        return (username.equals(appUser.getUsername())) && isTokenNotExpired(token) && !isValidToken;
     }
 
     private String generateToken(AppUser appUser, long expireTime) {
@@ -84,7 +85,7 @@ public class JwtService {
     }
 
     public String generateAccessToken(AppUser appUser) {
-        return generateToken(appUser, 1000 * 30);
+        return generateToken(appUser, 1000 * 60);
     }
 
     public String generateRefreshToken(AppUser appUser) {

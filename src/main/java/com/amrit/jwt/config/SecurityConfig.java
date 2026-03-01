@@ -65,3 +65,6 @@ public class SecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 }
+
+
+//I provided a valid token, & there is really that user in db, & the token is not expired, but why do I keep getting this error:

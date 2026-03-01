@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS token (
     version         BIGINT                  NOT NULL,
     access_token    VARCHAR(255)            NOT NULL,
     refresh_token   VARCHAR(255)            NOT NULL,
-    is_logged_out   BOOLEAN                 NOT NULL,
+    logged_out      BOOLEAN                 NOT NULL,
     app_user_id     BIGINT                  NOT NULL,
     FOREIGN KEY (app_user_id) REFERENCES app_user(id)
 );

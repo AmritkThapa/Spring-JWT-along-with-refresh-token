@@ -1,15 +1,11 @@
 package com.amrit.jwt.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "token")
 public class Token extends AbstractEntity{
@@ -19,8 +15,8 @@ public class Token extends AbstractEntity{
     @Column(name = "refresh_token")
     private String refreshToken;
 
-    @Column(name = "is_logged_out")
-    private boolean isLoggedOut;
+    @Column(name = "logged_out")
+    private boolean loggedOut;
 
     @ManyToOne
     @JoinColumn(name = "app_user_id", referencedColumnName = "id")

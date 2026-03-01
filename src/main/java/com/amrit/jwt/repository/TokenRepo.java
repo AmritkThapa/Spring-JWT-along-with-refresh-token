@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TokenRepo extends JpaRepository<Token, Long> {
-    List<Token> findByAppUserAndIsLoggedOutFalse(AppUser appUser);
+    List<Token> findByAppUserAndLoggedOutFalse(AppUser appUser);
 
     Optional<Token> findByAccessToken(String accessToken);
     Optional<Token> findByRefreshToken(String refreshToken);

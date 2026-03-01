@@ -17,15 +17,13 @@ public class TokenUtil {
         return tokenRepo.save(token);
     }
 
-    public static Boolean revokeAllTokensByUser(Optional<AppUser> appUser, TokenRepo tokenRepo) {
-        List<Token> tokens = tokenRepo.findByAppUserAndIsLoggedOutFalse(appUser.get());
+    public static void revokeAllTokensByUser(Optional<AppUser> appUser, TokenRepo tokenRepo) {
+        List<Token> tokens = tokenRepo.findByAppUserAndLoggedOutFalse(appUser.get());
         if (!tokens.isEmpty()) {
-            tokens.forEach(token -> {
+            for (Token token : tokens){
                 token.setLoggedOut(true);
                 tokenRepo.save(token);
-            });
-            return true;
+            }
         }
-        return true;
     }
 }
